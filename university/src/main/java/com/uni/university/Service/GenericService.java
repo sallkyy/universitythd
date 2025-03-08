@@ -1,17 +1,23 @@
 package com.uni.university.Service;
 
+import com.uni.university.repository.GenericRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 @Service
-public class SelectService<T,ID> {
+public abstract class GenericService<T,ID extends Serializable> {
+
+    private final GenericRepository<T,ID> repository;
+
     @Autowired
-    private JpaRepository<T,ID> repository;
+    public GenericService(GenericRepository<T,ID> repository){
+        this.repository = repository;
+    }
 
     public List<T> findAll(){
         return repository.findAll();
@@ -20,6 +26,7 @@ public class SelectService<T,ID> {
     public Optional<T> findByID(ID id){
         return repository.findById(id);
     }
+
     public T save(T entity) {
         return repository.save(entity);
     }

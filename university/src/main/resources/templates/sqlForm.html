@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Запросы</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>Ввод запроса</h1>
+<form action="/university/sql" method="post">
+    <label for="sqlQuery">Ввод:</label><br>
+    <textarea id="sqlQuery" name="sqlQuery" rows="6" cols="52" th:text="${sqlQuery}"></textarea><br><br>
+    <button type="submit">Искать</button>
+</form>
+
+<div th:if="${error}">
+    <p style="color: red;" th:text="${error}"></p>
+</div>
+
+<div th:if="${results != null}">  <!-- Проверяем, что результаты есть -->
+    <h1>Вывод по запросу:</h1>
+    <p><b>Query:</b> <span th:text="${sqlQuery}"></span></p>
+    <table border="1" th:if="${results != null and !results.isEmpty()}"> <!-- Дополнительная проверка на пустоту -->
+        <thead>
+        <tr>
+            <th th:each="columnName : ${results.size() > 0 ? results.get(0).keySet() : {}}" th:text="${columnName}"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row : ${results}">
+            <td th:each="value : ${row.values()}" th:text="${value}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${results == null or results.isEmpty()}">
+        <p>Таких записей нет.</p>
+    </div>
+</div>
+</body>
+</html>

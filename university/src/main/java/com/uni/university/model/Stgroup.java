@@ -26,8 +26,8 @@ public class Stgroup {
     private int course;
     private int sem;
 
-    @ManyToOne
-    @JoinColumn(name = "speciality_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "speciality_id", nullable = false)
     private Speciality speciality;
 
     @OneToMany(mappedBy = "stgroup", cascade = CascadeType.ALL, orphanRemoval = true)

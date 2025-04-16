@@ -2,6 +2,7 @@ package com.uni.university.controller;
 
 import com.uni.university.Service.SqlService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +27,27 @@ public class SqlController {
     }
 
     @PostMapping("/sql")
-    public String executeSQL(@RequestParam("sqlQuery") String sqlQuery, Model model) {
-        List<Map<String, Object>> results = sqlService.executeSQL(sqlQuery);
-        model.addAttribute("results", results);
-        model.addAttribute("sqlQuery", sqlQuery); // Чтобы отобразить запрос на странице
-        return "sqlForm"; // Возвращаем тот же шаблон
+    public String executeSQL(
+            @RequestParam("sqlQuery") String sqlQuery,
+            Model model
+    ) {
+        String toLowerQuery = sqlQuery.trim().toLowerCase();
+        if (!toLowerQuery.startsWith("select ")) {
+            model.addAttribute("error", "Разрешены только SELECT-запросы");
+            model.addAttribute("results", null);
+            model.addAttribute("sqlQuery", sqlQuery);
+            return "sqlForm";
+        }
+        try {
+            List<Map<String, Object>> results = sqlService.executeSQL(sqlQuery);
+            model.addAttribute("results", results);
+            model.addAttribute("error", null);
+        } catch (DataAccessException e) {  // <- Ловим все ошибки работы с БД
+            model.addAttribute("error", "Ошибка SQL: " + e.getMostSpecificCause().getMessage());
+            model.addAttribute("results", null);
+        }
+        model.addAttribute("sqlQuery", sqlQuery);
+        return "sqlForm";
     }
 }
 

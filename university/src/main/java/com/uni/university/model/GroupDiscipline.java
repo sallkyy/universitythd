@@ -17,13 +17,14 @@ public class GroupDiscipline {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "stgroup_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "stgroup_id", nullable = false)
     private Stgroup stgroup;
 
-    @ManyToOne
-    @JoinColumn(name = "discipline_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "discipline_id", nullable = false)
     private Discipline discipline;
 
     private String type_mark;
+    private int semestr;
 }

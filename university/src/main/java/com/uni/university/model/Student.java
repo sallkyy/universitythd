@@ -18,11 +18,10 @@ public class Student {
     private long id;
 
     private String name;
-    private long number;
     private long stud_book;
 
-    @ManyToOne
-    @JoinColumn(name = "stgroup_id")
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "stgroup_id", nullable = true)
     private Stgroup stgroup;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)

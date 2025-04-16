@@ -21,18 +21,16 @@ public class Control {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "discipline_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "discipline_id", nullable = false)
     private Discipline discipline;
 
-    @ManyToOne
-    @JoinColumn(name = "tutor_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "tutor_id", nullable = false)
     private Tutor tutor;
 
     @OneToMany(mappedBy = "control", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentControl> studentControls = new ArrayList<>();
 
-    private int result;
     private LocalDate date_of_exam;
-    private boolean corruption;
 }

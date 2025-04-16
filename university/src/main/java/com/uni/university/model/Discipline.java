@@ -23,7 +23,6 @@ public class Discipline {
     private long id;
 
     private String name;
-    private int sem;
 
     @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<GroupDiscipline> groupDisciplines = new HashSet<>();

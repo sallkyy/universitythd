@@ -17,13 +17,18 @@ public class StudentControl {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @ManyToOne
-    @JoinColumn(name = "control_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "control_id", nullable = false)
     private Control control;
 
-    private boolean access;
+    @Column(nullable = true)
+    private int attempt;
+
+    private boolean isPaid;
+    @Column (nullable = true)
+    private String result;
 }

@@ -15,4 +15,8 @@ public class SqlService {
     public List<Map<String, Object>> executeSQL(String sqlQuery) {
         return jdbcTemplate.queryForList(sqlQuery);
     }
+
+    public int executeCrud(String sqlQuery) {
+        return jdbcTemplate.update(sqlQuery);
+    }
 }

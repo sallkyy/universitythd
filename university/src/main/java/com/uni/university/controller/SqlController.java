@@ -49,5 +49,57 @@ public class SqlController {
         model.addAttribute("sqlQuery", sqlQuery);
         return "sqlForm";
     }
+    // Страница для CRUD-запросов (INSERT, UPDATE, DELETE)
+    @GetMapping("/crud")
+    public String crudForm(Model model) {
+        model.addAttribute("message", null);
+        return "sqlCrudForm"; // Шаблон только для CRUD
+    }
+
+    // Обработка CRUD-запросов
+    @PostMapping("/crud")
+    public String executeCrud(
+            @RequestParam("sqlQuery") String sqlQuery,
+            Model model) {
+
+        String normalizedQuery = sqlQuery.trim().toLowerCase();
+        if (normalizedQuery.startsWith("select ")) {
+            model.addAttribute("error", "На этой странице запрещены SELECT-запросы");
+            model.addAttribute("sqlQuery", sqlQuery);
+            return "sqlCrudForm";
+        }
+
+        try {
+            int affectedRows = sqlService.executeCrud(sqlQuery);
+            model.addAttribute("message", "Успешно! Затронуто строк: " + affectedRows);
+            model.addAttribute("error", null);
+        } catch (DataAccessException e) {
+            String errorMessage = parseTriggerError(e.getMostSpecificCause());
+            model.addAttribute("error", "Ошибка: " + errorMessage);
+        }
+
+        model.addAttribute("sqlQuery", sqlQuery);
+        return "sqlCrudForm";
+    }
+
+    private String parseTriggerError(Throwable cause) {
+        if (cause == null) {
+            return "Неизвестная ошибка базы данных";
+        }
+
+        String message = cause.getMessage();
+
+        // Для PostgreSQL
+        if (cause instanceof org.postgresql.util.PSQLException) {
+            if (message != null && message.startsWith("TRIGGER_ERROR:")) {
+                String[] parts = message.split(":", 3);
+                return parts.length > 2 ? parts[2] : parts[1];
+            }
+            return ((org.postgresql.util.PSQLException) cause).getServerErrorMessage().getMessage();
+        }
+
+        // Общий случай
+        return message;
+    }
 }
 

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +30,7 @@ public class Discipline {
     private Set<GroupDiscipline> groupDisciplines = new HashSet<>();
 
     @ManyToMany(mappedBy = "disciplines")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Tutor> tutors = new ArrayList<>();
 
     @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL, orphanRemoval = true)

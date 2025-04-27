@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
-@Table(name = "studetn_control")
+@Table(name = "student_control")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -31,4 +33,6 @@ public class StudentControl {
     private boolean isPaid;
     @Column (nullable = true)
     private String result;
+
+    private LocalDate date_of_control;
 }

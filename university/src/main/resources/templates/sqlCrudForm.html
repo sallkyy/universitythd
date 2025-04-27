@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>CRUD-запросы</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+<h1>Ввод INSERT/UPDATE/DELETE запроса</h1>
+<form th:action="@{/university/crud}" method="post">
+  <textarea name="sqlQuery" th:text="${sqlQuery}" rows="6" cols="52"></textarea>
+  <button type="submit">Выполнить</button>
+</form>
+
+<div th:if="${error}" style="color: red;" th:text="${error}"></div>
+<div th:if="${message}" style="color: green;" th:text="${message}"></div>
+</body>
+</html>
